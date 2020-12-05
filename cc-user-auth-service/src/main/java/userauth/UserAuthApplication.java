@@ -50,6 +50,7 @@ public class UserAuthApplication {
     }
 
     @Bean
+    @LoadBalanced
     public RestTemplate restTemplate(RestTemplateBuilder builder) {
         return builder.build();
     }

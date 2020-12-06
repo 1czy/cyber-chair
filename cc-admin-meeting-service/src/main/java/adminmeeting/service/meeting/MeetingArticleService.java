@@ -21,11 +21,16 @@ import java.util.*;
 
 @Service
 public class MeetingArticleService {
-
+//    @Autowired
+//    private UserRepository userRepository;
+//    @Autowired
+//    private ArticleRepository articleRepository;
     @Autowired
     private MeetingRepository meetingRepository;
     @Autowired
     private PCMemberRelationRepository pcMemberRelationRepository;
+//    @Autowired
+//    private ReviewRelationRepository reviewRelationRepository;
 
     private UserApi userApi = new UserApi();
     private ReviewRelationApi reviewRelationApi = new ReviewRelationApi();
@@ -35,6 +40,14 @@ public class MeetingArticleService {
 
     private Random random = new Random();
 
+//    @Autowired
+//    public MeetingArticleService(UserRepository userRepository, ArticleRepository articleRepository, MeetingRepository meetingRepository, PCMemberRelationRepository pcMemberRelationRepository, ReviewRelationRepository reviewRelationRepository) {
+//        this.userRepository = userRepository;
+//        this.articleRepository = articleRepository;
+//        this.meetingRepository = meetingRepository;
+//        this.pcMemberRelationRepository = pcMemberRelationRepository;
+//        this.reviewRelationRepository = reviewRelationRepository;
+//    }
     @Autowired
     public MeetingArticleService(MeetingRepository meetingRepository, PCMemberRelationRepository pcMemberRelationRepository) {
         this.meetingRepository = meetingRepository;
@@ -51,7 +64,7 @@ public class MeetingArticleService {
 
         String meetingStatus = meeting.getStatus();
         if(!meetingStatus.equals(MeetingStatus.applyPassed)){
-            throw new MeetingUnavaliableToOpe`rateException(meetingName);
+            throw new MeetingUnavaliableToOperateException(meetingName);
         }
         meeting.setStatus(MeetingStatus.submissionAvaliable);
         meetingRepository.save(meeting);

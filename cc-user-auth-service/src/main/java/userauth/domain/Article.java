@@ -1,6 +1,8 @@
 package userauth.domain;
 
 
+import javafx.util.Pair;
+
 import java.util.Set;
 
 /**

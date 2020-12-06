@@ -2,6 +2,7 @@ package adminmeeting.api;
 
 import adminmeeting.config.RemoteServiceConfig;
 import adminmeeting.domain.ReviewRelation;
+import adminmeeting.domain.User;
 import adminmeeting.utility.ApiUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
@@ -11,6 +12,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.List;

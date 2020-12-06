@@ -1,6 +1,6 @@
 package pcmember.utility;
 
-import pcmember.utility.Pair;
+import javafx.util.Pair;
 import java.util.Set;
 
 public class Article {

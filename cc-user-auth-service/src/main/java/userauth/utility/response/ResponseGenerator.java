@@ -1,7 +1,6 @@
 package userauth.utility.response;
 
-
-import userauth.domain.Pair;
+import javafx.util.Pair;
 
 import java.lang.reflect.Field;
 import java.util.HashMap;

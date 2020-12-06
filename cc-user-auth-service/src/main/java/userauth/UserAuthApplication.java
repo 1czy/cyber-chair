@@ -1,7 +1,5 @@
 package userauth;
 
-import org.springframework.cloud.client.loadbalancer.LoadBalanced;
-import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import userauth.domain.User;
 import userauth.repository.UserRepository;
 import org.springframework.boot.CommandLineRunner;
@@ -12,7 +10,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.web.client.RestTemplate;
 
-@EnableEurekaClient
 @SpringBootApplication
 public class UserAuthApplication {
     public static void main(String[] args) {
@@ -43,17 +40,7 @@ public class UserAuthApplication {
                     );
                     userRepository.save(admin);
                 }
-                if (userRepository.findByUsername("test123") == null) {
-                    User testUser = new User(
-                            "test123",
-                            "test",
-                            BCrypt.hashpw("12345qwert", BCrypt.gensalt()),
-                            "test@123.com",
-                            "fudan",
-                            "shanghai"
-                    );
-                    userRepository.save(testUser);
-                }
+
             }
 
 
@@ -61,7 +48,6 @@ public class UserAuthApplication {
     }
 
     @Bean
-    @LoadBalanced
     public RestTemplate restTemplate(RestTemplateBuilder builder) {
         return builder.build();
     }

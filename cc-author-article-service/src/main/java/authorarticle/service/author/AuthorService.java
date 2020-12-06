@@ -7,16 +7,13 @@ import authorarticle.exception.MeetingUnavaliableToOperateException;
 import authorarticle.exception.UserNamedidntExistException;
 import authorarticle.exception.user.ArticleNotFoundException;
 import authorarticle.repository.ArticleRepository;
-import authorarticle.request.ArticleRequest;
-import authorarticle.response.MeetingResponse;
-import authorarticle.response.ReviewRelationResponse;
-import authorarticle.response.UserResponse;
+import authorarticle.request.user.ArticleRequest;
 import authorarticle.utility.ApiUtil;
-import authorarticle.utility.Pair;
 import authorarticle.utility.contract.ArticleStatus;
 import authorarticle.utility.contract.MeetingStatus;
 import authorarticle.utility.response.ResponseGenerator;
 import authorarticle.utility.response.ResponseWrapper;
+import javafx.util.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
@@ -66,15 +63,15 @@ public class AuthorService {
         List<Article> articleList = articleRepository.findByContributorName(username);
         HashMap<String, Set<HashMap<String, Object>>> body = new HashMap<>();
         Set<HashMap<String, Object>> response = new HashSet<>();
-        Set<String>meetingCount = new HashSet<>();
+        Set<Long>meetingCount = new HashSet<>();
 //        TODO: There should be more efficient by change it into list, or finished by meeting
         for(Article article : articleList){
             // FINISHED: change to REST
-             MeetingResponse meetingResponse = this.findMeetingByMeetingName(article.getMeetingname());
+             Meeting meeting = this.findMeetingByMeetingName(article.getMeetingname());
 
-            if(!meetingCount.contains(meetingResponse.getMeetingName())){
-                meetingCount.add(meetingResponse.getMeetingName());
-                response.add(ResponseGenerator.generate(meetingResponse,
+            if(!meetingCount.contains(meeting.getId())){
+                meetingCount.add(meeting.getId());
+                response.add(ResponseGenerator.generate(meeting,
                         new String[]{"meetingName", "acronym", "submissionDeadlineDate", "topic"}, null));
             }
         }
@@ -127,7 +124,7 @@ public class AuthorService {
 
 //        FINISHED: need to be changed into rest
 
-        MeetingResponse meetingResponse = this.findMeetingByMeetingName(meetingName);
+        Meeting meeting = this.findMeetingByMeetingName(meetingName);
 //        Meeting fakemeeting = new Meeting();
 //        fakemeeting.setStatus(MeetingStatus.submissionAvaliable);
 //        fakemeeting.setAcronym("sdasd");
@@ -137,10 +134,10 @@ public class AuthorService {
 //        fakemeeting.setOrganizer("baidu");
 //        fakemeeting.setMeetingName("fake meeting");
 //        fakemeeting.setRegion("china");
-        UserResponse articleUploader = this.findUserByUsername(username);
+        User articleUploader = this.findUserByUsername(username);
 
         //guarantee that this operation is valid
-        authenticateArticle(meetingResponse, articleUploader);
+        authenticateArticle(meeting, articleUploader);
 
         MultipartFile pdfFile = request.getFile();
         //save the file, if exceptions happens, throw new InternalServerError
@@ -181,10 +178,10 @@ public class AuthorService {
         String username = request.getUsername();
 
 //        FINISHED: need to be changed into rest
-        MeetingResponse meetingResponse = this.findMeetingByMeetingName(meetingName);
-        UserResponse userResponse = this.findUserByUsername(username);
+        Meeting meeting = this.findMeetingByMeetingName(meetingName);
+        User user = this.findUserByUsername(username);
 
-        authenticateArticle(meetingResponse, userResponse);
+        authenticateArticle(meeting, user);
         if(request.getFile() != null) {
 
             //delete the previous pdf file
@@ -198,7 +195,7 @@ public class AuthorService {
                 throw new InternalServerError("UserArticleService.updateExistedArticle(): previous pdf doesn't exist");
             }
             String internalFilePath = targetRootDir +
-                    userResponse.getUsername() + File.separator +
+                    user.getUsername() + File.separator +
                     request.getSubmitDate() + File.separator;
 
             MultipartFile pdfFile = request.getFile();
@@ -235,11 +232,11 @@ public class AuthorService {
         if(article == null)
             throw new ArticleNotFoundException(articleId);
 //        FINISHED: should to be changed into rest
-        Set<ReviewRelationResponse> allReviews = this.findReviewRelationsByArticleId(articleId);
+        Set<ReviewRelation> allReviews = this.findReviewRelationsByArticleId(articleId);
 
         HashMap<String, Set<HashMap<String, Object>>> respBody = new HashMap<>();
         Set<HashMap<String, Object>> reviews = new HashSet<>();
-        for(ReviewRelationResponse relation: allReviews){
+        for(ReviewRelation relation: allReviews){
             HashMap<String, Object> items = new HashMap<>();
             items.put("score", relation.getScore());
             items.put("confidence", relation.getConfidence());
@@ -279,13 +276,13 @@ public class AuthorService {
     }
 
     //this function is used to guarantee a article can be upload or update
-    private void authenticateArticle(MeetingResponse meetingResponse, UserResponse userResponse) {
-        if (meetingResponse == null)
+    private void authenticateArticle(Meeting meeting, User user) {
+        if (meeting == null)
             throw new MeetingUnavaliableToOperateException("Not created");
-        if (userResponse == null)
+        if (user == null)
             throw new UserNamedidntExistException("not a valid user");
 
-        if (!meetingResponse.getStatus().equals(MeetingStatus.submissionAvaliable))
+        if (!meeting.getStatus().equals(MeetingStatus.submissionAvaliable))
             throw new MeetingUnavaliableToOperateException("update or upload articles");
     }
 
@@ -306,39 +303,38 @@ public class AuthorService {
 
     // sealed all data access into functions
     // make rest api just like local function
-    private MeetingResponse findMeetingByMeetingName(String meetingName) {
+    private Meeting findMeetingByMeetingName(String meetingName) {
         MultiValueMap<String, String> paramsMeeting = new LinkedMultiValueMap<>();
         paramsMeeting.add("meetingName", meetingName);
-        ResponseEntity<MeetingResponse> res = restTemplate.exchange(
+        ResponseEntity<Meeting> res = restTemplate.exchange(
                 apiUtil.encodeUriForGet(paramsMeeting, api.getFindMeetingByMeetingName()),
                 HttpMethod.GET,
                 null,
-                MeetingResponse.class
+                Meeting.class
         );
         return Objects.requireNonNull(res.getBody());
     }
 
-    private UserResponse findUserByUsername(String username) {
-        System.out.println(username);
+    private User findUserByUsername(String username) {
         MultiValueMap<String, String> paramsUser = new LinkedMultiValueMap<>();
         paramsUser.add("username", username);
-        ResponseEntity<UserResponse> resUser = restTemplate.exchange(
+        ResponseEntity<User> resUser = restTemplate.exchange(
                 apiUtil.encodeUriForGet(paramsUser, api.getFindUserByUsername()),
                 HttpMethod.GET,
                 null,
-                UserResponse.class
+                User.class
         );
         return Objects.requireNonNull(resUser.getBody());
     }
 
-    private Set<ReviewRelationResponse> findReviewRelationsByArticleId(String articleId) {
+    private Set<ReviewRelation> findReviewRelationsByArticleId(String articleId) {
         MultiValueMap<String, String> paramsReview = new LinkedMultiValueMap<>();
         paramsReview.add("articleId", articleId);
-        ResponseEntity<Set<ReviewRelationResponse>> resUser = restTemplate.exchange(
+        ResponseEntity<Set<ReviewRelation>> resUser = restTemplate.exchange(
                 apiUtil.encodeUriForGet(paramsReview, api.getFindReviewRelationsByArticleId()),
                 HttpMethod.GET,
                 null,
-                new ParameterizedTypeReference<Set<ReviewRelationResponse>>(){}
+                new ParameterizedTypeReference<Set<ReviewRelation>>(){}
         );
         return Objects.requireNonNull(resUser.getBody());
     }

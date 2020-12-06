@@ -26,9 +26,8 @@ public class UserCommonController {
      */
     @ApiOperation(value = "根据id查找用户", response = User.class)
     @GetMapping("/user/id")
-    public ResponseEntity<?> findUserById(String id) {
-        long userId = Long.parseLong(id);
-        return ResponseEntity.ok(userService.findUserById(userId));
+    public ResponseEntity<?> findUserById(long id) {
+        return ResponseEntity.ok(userService.findUserById(id));
     }
 
     /**
@@ -60,7 +59,7 @@ public class UserCommonController {
 
     @ApiOperation(value = "根据email找用户", response = User.class)
     @GetMapping("/user/email")
-    public ResponseEntity<?> findUserByEmail(String email) {
+    public ResponseEntity<?> findUserByEmail(String email){
         return ResponseEntity.ok(userService.findUserByEmail(email));
     }
 }

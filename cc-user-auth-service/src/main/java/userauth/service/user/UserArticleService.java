@@ -13,6 +13,7 @@ import userauth.utility.contract.ArticleStatus;
 import userauth.utility.contract.MeetingStatus;
 import userauth.utility.response.ResponseGenerator;
 import userauth.utility.response.ResponseWrapper;
+import javafx.util.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;

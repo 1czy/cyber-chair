@@ -1,7 +1,9 @@
 package userauth.service.user;
 
 import userauth.config.RemoteServiceConfig;
-import userauth.domain.*;
+import userauth.domain.Article;
+import userauth.domain.Meeting;
+import userauth.domain.PCMemberRelation;
 import userauth.repository.*;
 import userauth.utility.ApiUtil;
 import userauth.utility.contract.MeetingStatus;

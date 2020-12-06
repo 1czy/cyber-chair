@@ -5,19 +5,11 @@
     <parent>
         <artifactId>cyber-chair</artifactId>
         <groupId>cn.edu.fudan.ase</groupId>
-        <version>1.0</version>
+        <version>1.0-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>cc-author-article-service</artifactId>
-
-    <dependencies>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-security</artifactId>
-        </dependency>
-    </dependencies>
-
 
     <!--    TODO: javafx-maven-plugin didn't exist, demo shows blow-->
     <!--    <build>-->

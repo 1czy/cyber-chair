@@ -1,9 +1,7 @@
 package authorarticle.domain;
 
 
-
-
-import authorarticle.utility.Pair;
+import javafx.util.Pair;
 
 import javax.persistence.*;
 import java.util.Set;
@@ -26,7 +24,7 @@ public class Article {
     @Column(columnDefinition = "BLOB")
     private Set<Pair<Author,Integer>> authors;
 
-    public Article(){}
+    public Article() {}
 
     public Article(String contributorName, String meetingName, String submitDate, String title, String articleAbstract, String filePath, String status, Set<String> topic, Set<Pair<Author, Integer>> authors) {
         this.contributorName = contributorName;
@@ -40,20 +38,16 @@ public class Article {
         this.authors = authors;
     }
 
-    @Override
-    public String toString() {
-        return "Article{" +
-                "id=" + id +
-                ", contributorName='" + contributorName + '\'' +
-                ", meetingName='" + meetingName + '\'' +
-                ", submitDate='" + submitDate + '\'' +
-                ", title='" + title + '\'' +
-                ", articleAbstract='" + articleAbstract + '\'' +
-                ", filePath='" + filePath + '\'' +
-                ", status='" + status + '\'' +
-                ", topic=" + topic +
-                ", authors=" + authors +
-                '}';
+    public Article(Article article) {
+        this.contributorName = article.getContributorName();
+        this.meetingName = article.getMeetingname();
+        this.submitDate = article.getSubmitDate();
+        this.title = article.getTitle();
+        this.articleAbstract = article.getArticleAbstract();
+        this.filePath = article.getFilePath();
+        this.status = article.getStatus();
+        this.topic = article.getTopic();
+        this.authors = article.getAuthors();
     }
 
     public Long getId() {

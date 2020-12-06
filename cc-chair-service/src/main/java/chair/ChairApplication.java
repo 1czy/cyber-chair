@@ -1,15 +1,15 @@
 package chair;
 
-import chair.domain.User;
-import chair.repository.UserRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.client.RestTemplateBuilder;
+import org.springframework.cloud.client.loadbalancer.LoadBalanced;
+import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import org.springframework.context.annotation.Bean;
-import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.web.client.RestTemplate;
 
+@EnableEurekaClient
 @SpringBootApplication
 public class ChairApplication {
 
@@ -23,24 +23,10 @@ public class ChairApplication {
      * You can change it as you like.
      */
     @Bean
-    public CommandLineRunner dataLoader(UserRepository userRepository) {
+    public CommandLineRunner dataLoader() {
         return new CommandLineRunner() {
             @Override
             public void run(String... args) throws Exception {
-                // Create authorities if not exist.
-
-                // Create an admin if not exists.
-                if (userRepository.findByUsername("admin") == null) {
-                    User admin = new User(
-                            "admin",
-                            "ErangelManager",
-                            BCrypt.hashpw("Erangel", BCrypt.gensalt()),
-                            "libowen@fudan.edu.cn",
-                            "Fudan University",
-                            "ShangHai China"
-                    );
-                    userRepository.save(admin);
-                    }
 
             }
 
@@ -48,6 +34,7 @@ public class ChairApplication {
         };
     }
     @Bean
+    @LoadBalanced
     public RestTemplate restTemplate(RestTemplateBuilder builder) {
         return builder.build();
     }

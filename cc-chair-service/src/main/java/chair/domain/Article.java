@@ -1,12 +1,13 @@
 package chair.domain;
 
 
-import javafx.util.Pair;
+
+import chair.utility.Pair;
 
 import javax.persistence.*;
 import java.util.Set;
 
-@Entity
+//@Entity
 public class Article {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

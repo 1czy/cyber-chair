@@ -1,6 +1,5 @@
 package chair.service;
 
-import chair.repository.*;
 import chair.request.meeting.PCMemberInvitationRequest;
 import chair.request.meeting.*;
 
@@ -12,7 +11,6 @@ import chair.utility.response.ResponseWrapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
 @org.springframework.stereotype.Service
@@ -21,13 +19,7 @@ public class Service {
 
     Logger logger = LoggerFactory.getLogger(Service.class);
 
-    private UserRepository userRepository;
-    private ArticleRepository articleRepository;
-    private ChairRelationRepository chairRelationRepository;
-    private MeetingRepository meetingRepository;
-    private PCMemberRelationRepository pcMemberRelationRepository;
-    private ReviewRelationRepository reviewRelationRepository;
-    private PostRepository postRepository;
+
 
     private ChairMeetingService chairMeetingService;
     private static String fetched = " have been fetched";
@@ -35,28 +27,8 @@ public class Service {
     private static String forArticle = "for Article ";
 
     @Autowired
-    public Service(UserRepository userRepository,
-                   ArticleRepository articleRepository,
-                   ChairRelationRepository chairRelationRepository,
-                   MeetingRepository meetingRepository,
-                   PCMemberRelationRepository pcMemberRelationRepository,
-                   ReviewRelationRepository reviewRelationRepository,
-                   PostRepository postRepository,
-                   ChairMeetingService chairMeetingService
-
-    ) {
-        this.userRepository = userRepository;
-        this.articleRepository = articleRepository;
-        this.chairRelationRepository = chairRelationRepository;
-        this.meetingRepository = meetingRepository;
-        this.pcMemberRelationRepository = pcMemberRelationRepository;
-        this.reviewRelationRepository = reviewRelationRepository;
-        this.postRepository = postRepository;
-        this.chairMeetingService = chairMeetingService;
+    public Service() {
     }
-
-
-    public Service(){}
 
 
     public ResponseWrapper<?> pcmInvitation(PCMemberInvitationRequest request) {

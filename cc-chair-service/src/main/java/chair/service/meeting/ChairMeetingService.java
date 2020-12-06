@@ -3,7 +3,6 @@ package chair.service.meeting;
 import chair.config.RemoteServiceConfig;
 import chair.domain.*;
 import chair.exception.*;
-import chair.repository.*;
 import chair.request.meeting.*;
 import chair.utility.ApiUtil;
 import chair.utility.contract.*;
@@ -19,22 +18,17 @@ import org.springframework.web.client.RestTemplate;
 
 @Service
 public class ChairMeetingService {
-    @Autowired
-    private MeetingRepository meetingRepository;
-    @Autowired
-    private UserRepository userRepository;
-    @Autowired
-    private PCMemberRelationRepository pcMemberRelationRepository;
+
+
     @Autowired
     private RemoteServiceConfig remote;
     @Autowired
     private RestTemplate restTemplate;
     @Autowired
     private ApiUtil apiUtil;
-    public ChairMeetingService(MeetingRepository meetingRepository, UserRepository userRepository, PCMemberRelationRepository pcMemberRelationRepository) {
-        this.meetingRepository = meetingRepository;
-        this.userRepository = userRepository;
-        this.pcMemberRelationRepository = pcMemberRelationRepository;
+    public ChairMeetingService() {
+
+
     }
 
 
@@ -212,41 +206,5 @@ public class ChairMeetingService {
                 entity,
                 PCMemberRelation.class);
     }
-//    public void MeetingPost(Meeting meeting, String token){
-//
-//        //构造请求头，加入token
-//        HttpHeaders httpHeaders = new HttpHeaders();
-//        httpHeaders.set("authorization", token);
-//
-//        MultiValueMap<String, Object> params = new LinkedMultiValueMap<>();
-//        params.add("Meeting", meeting);
-//
-//        HttpEntity<MultiValueMap<String, Object>> entity = new HttpEntity<>(params, httpHeaders);
-//        //发送meetingStatus
-//        //ResponseEntity<Meeting> resp =
-//        restTemplate.exchange(
-//                "/meeting/setStatus",//接口
-//                HttpMethod.POST,
-//                entity,
-//                Meeting.class);
-//
-//    }
-//    public void PCMemberRelationPost( PCMemberRelation pcMemberRelation, String token){
-//
-//        //构造请求头，加入token
-//        HttpHeaders httpHeaders = new HttpHeaders();
-//        httpHeaders.set("authorization", token);
-//
-//        MultiValueMap<String, Object> params = new LinkedMultiValueMap<>();
-//        params.add("PCMemberRelation", pcMemberRelation);
-//
-//        HttpEntity<MultiValueMap<String, Object>> entity = new HttpEntity<>(params, httpHeaders);
-//        //发送meetingStatus
-//        //ResponseEntity<Meeting> resp =
-//        restTemplate.exchange(
-//                "/meeting/setPCMemberRelation",//接口
-//                HttpMethod.POST,
-//                entity,
-//                PCMemberRelation.class);
-//    }
+
 }

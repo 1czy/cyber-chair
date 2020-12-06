@@ -1,5 +1,6 @@
 package userauth;
 
+import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import userauth.domain.User;
 import userauth.repository.UserRepository;

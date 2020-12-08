@@ -1,5 +1,6 @@
 package userauth;
 
+import org.springframework.amqp.core.Queue;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import userauth.domain.User;
@@ -11,6 +12,9 @@ import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.web.client.RestTemplate;
+
+import static userauth.service.postmessage.PostMessageServiceImpl.DIRECT_QUEUE_NAME;
+import static userauth.service.postmessage.PostMessageServiceImpl.FANOUT_QUEUE_NAME;
 
 @EnableEurekaClient
 @SpringBootApplication
@@ -65,4 +69,14 @@ public class UserAuthApplication {
     public RestTemplate restTemplate(RestTemplateBuilder builder) {
         return builder.build();
     }
+    @Bean
+    public Queue createDirectQueue() {
+        return new org.springframework.amqp.core.Queue(DIRECT_QUEUE_NAME);
+    }
+    // 创建队列
+    @Bean
+    public Queue createFanoutQueue() {
+        return new Queue(FANOUT_QUEUE_NAME);
+    }
+
 }

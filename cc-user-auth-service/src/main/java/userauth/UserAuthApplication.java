@@ -69,11 +69,12 @@ public class UserAuthApplication {
     public RestTemplate restTemplate(RestTemplateBuilder builder) {
         return builder.build();
     }
+
+    // 创建队列存储异步消息
     @Bean
     public Queue createDirectQueue() {
         return new org.springframework.amqp.core.Queue(DIRECT_QUEUE_NAME);
     }
-    // 创建队列
     @Bean
     public Queue createFanoutQueue() {
         return new Queue(FANOUT_QUEUE_NAME);

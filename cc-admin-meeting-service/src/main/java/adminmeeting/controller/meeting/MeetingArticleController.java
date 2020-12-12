@@ -30,20 +30,20 @@ public class MeetingArticleController {
     @Autowired
     private RestTemplate restTemplate;
 
-    @ApiOperation(value = "会议开始接受投稿", response = ResponseWrapper.class)
-    @PostMapping("/meeting/beginSubmission")
-    public ResponseEntity<?> beginSubmission(@RequestBody BeginSubmissionRequest request, @RequestHeader("authorization") String token) {
-        logger.debug("Begin Submission: " + request.toString());
-        String checkApi = remote.getCheck();
-        HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.set("authorization", token);
-        HttpEntity<String> entity = new HttpEntity<>(null, httpHeaders);
-        ResponseEntity<String> resp = restTemplate.exchange(checkApi, HttpMethod.GET, entity, String.class);
-        if(resp.getStatusCode()!= HttpStatus.OK){
-            return ResponseEntity.badRequest().build();
-        }
-        return ResponseEntity.ok(service.beginSubmission(request, token));
-    }
+//    @ApiOperation(value = "会议开始接受投稿", response = ResponseWrapper.class)
+//    @PostMapping("/meeting/beginSubmission")
+//    public ResponseEntity<?> beginSubmission(@RequestBody BeginSubmissionRequest request, @RequestHeader("authorization") String token) {
+//        logger.debug("Begin Submission: " + request.toString());
+//        String checkApi = remote.getCheck();
+//        HttpHeaders httpHeaders = new HttpHeaders();
+//        httpHeaders.set("authorization", token);
+//        HttpEntity<String> entity = new HttpEntity<>(null, httpHeaders);
+//        ResponseEntity<String> resp = restTemplate.exchange(checkApi, HttpMethod.GET, entity, String.class);
+//        if(resp.getStatusCode()!= HttpStatus.OK){
+//            return ResponseEntity.badRequest().build();
+//        }
+//        return ResponseEntity.ok(service.beginSubmission(request, token));
+//    }
 
     @ApiOperation(value = "获取审核的文章列表", response = ResponseWrapper.class)
     @GetMapping("/meeting/reviewArticles")
@@ -120,18 +120,18 @@ public class MeetingArticleController {
         return ResponseEntity.ok(service.beginReview(request, token));
     }
 
-    @ApiOperation(value = "将会议状态设置为publish", response = ResponseWrapper.class)
-    @PostMapping("/meeting/publish")
-    public ResponseEntity<?> reviewPublish(@RequestBody ResultPublishRequest request, @RequestHeader("authorization") String token) {
-        logger.debug("Review Request to Publish: " + request.toString());
-        String checkApi = remote.getCheck(); //检查token
-        HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.set("authorization", token);
-        HttpEntity<String> entity = new HttpEntity<>(null, httpHeaders);
-        ResponseEntity<String> resp = restTemplate.exchange(checkApi, HttpMethod.GET, entity, String.class);
-        if(resp.getStatusCode()!= HttpStatus.OK){
-            return ResponseEntity.badRequest().build();
-        }// 检查结束
-        return ResponseEntity.ok(service.reviewPublish(request, token));
-    }
+//    @ApiOperation(value = "将会议状态设置为publish", response = ResponseWrapper.class)
+//    @PostMapping("/meeting/publish")
+//    public ResponseEntity<?> reviewPublish(@RequestBody ResultPublishRequest request, @RequestHeader("authorization") String token) {
+//        logger.debug("Review Request to Publish: " + request.toString());
+//        String checkApi = remote.getCheck(); //检查token
+//        HttpHeaders httpHeaders = new HttpHeaders();
+//        httpHeaders.set("authorization", token);
+//        HttpEntity<String> entity = new HttpEntity<>(null, httpHeaders);
+//        ResponseEntity<String> resp = restTemplate.exchange(checkApi, HttpMethod.GET, entity, String.class);
+//        if(resp.getStatusCode()!= HttpStatus.OK){
+//            return ResponseEntity.badRequest().build();
+//        }// 检查结束
+//        return ResponseEntity.ok(service.reviewPublish(request, token));
+//    }
 }

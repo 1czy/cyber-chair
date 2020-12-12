@@ -9,10 +9,12 @@ import adminmeeting.repository.*;
 import adminmeeting.request.meeting.BeginReviewRequest;
 import adminmeeting.request.meeting.BeginSubmissionRequest;
 import adminmeeting.request.meeting.ReviewRequest;
+//import adminmeeting.utility.Pair;
+import adminmeeting.utility.Pair;
 import adminmeeting.utility.contract.*;
 import adminmeeting.utility.response.ResponseGenerator;
 import adminmeeting.utility.response.ResponseWrapper;
-import javafx.util.Pair;
+//import javafx.util.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -51,7 +53,7 @@ public class MeetingArticleService {
 
         String meetingStatus = meeting.getStatus();
         if(!meetingStatus.equals(MeetingStatus.applyPassed)){
-            throw new MeetingUnavaliableToOpe`rateException(meetingName);
+            throw new MeetingUnavaliableToOperateException(meetingName);
         }
         meeting.setStatus(MeetingStatus.submissionAvaliable);
         meetingRepository.save(meeting);

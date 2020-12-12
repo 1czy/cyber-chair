@@ -8,7 +8,7 @@ import chair.request.meeting.BeginSubmissionRequest;
 import chair.request.meeting.FinalPublishRequest;
 import chair.request.meeting.PCMemberInvitationRequest;
 import chair.request.meeting.ResultPublishRequest;
-import chair.service.Service;
+import chair.service.meeting.ChairMeetingService;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,13 +27,13 @@ import org.springframework.web.client.RestTemplate;
 public class ChairMeetingController {
     Logger logger = LoggerFactory.getLogger(ChairMeetingController.class);
 
-    private Service service;
+    private ChairMeetingService chairMeetingService;
     @Autowired
     private RestTemplate restTemplate;
     @Autowired
     private RemoteServiceConfig remote;
     @Autowired
-    public ChairMeetingController(Service service) { this.service = service; }
+    public ChairMeetingController(ChairMeetingService service) { this.chairMeetingService = service; }
     @ApiOperation(value = "将meeting状态设置成submissionAvaliable", response = Meeting.class)
     @PostMapping("/meeting/beginSubmission")
     public ResponseEntity<?> beginSubmission(@RequestBody BeginSubmissionRequest request,@RequestHeader("authorization") String token) {
@@ -44,7 +44,7 @@ public class ChairMeetingController {
         httpHeaders.set("authorization", token);
         HttpEntity<String> entity = new HttpEntity<>(null, httpHeaders);
         logger.debug("Begin Submission: " + request.toString());
-        return ResponseEntity.ok(service.beginSubmission(request));
+        return ResponseEntity.ok(chairMeetingService.beginSubmission(request));
     }
 
     @ApiOperation(value = "将meeting状态设置成resultPublished", response = Meeting.class)
@@ -59,7 +59,7 @@ public class ChairMeetingController {
         //发送check请求到user-auth服务中， 目前api写死的
         ResponseEntity<String> resp = restTemplate.exchange(checkApi, HttpMethod.GET, entity, String.class);
         logger.debug("Review Request to Publish: " + request.toString());
-        return ResponseEntity.ok(service.reviewPublish(request));
+        return ResponseEntity.ok(chairMeetingService.reviewPublish(request));
     }
     @ApiOperation(value = "将meeting状态设置成reviewPublish", response = Meeting.class)
     @PostMapping("/meeting/finalPublish")
@@ -71,7 +71,7 @@ public class ChairMeetingController {
         httpHeaders.set("authorization", token);
         HttpEntity<String> entity = new HttpEntity<>(null, httpHeaders);
         logger.debug("Final Publish: " + request.toString());
-        return ResponseEntity.ok(service.finalPublish(request));
+        return ResponseEntity.ok(chairMeetingService.finalPublish(request));
     }
     @ApiOperation(value = "将pcMemberRelation状态设置成applyFailed", response = PCMemberRelation.class)
     @PostMapping("/meeting/pcmInvitation")
@@ -83,6 +83,6 @@ public class ChairMeetingController {
         httpHeaders.set("authorization", token);
         HttpEntity<String> entity = new HttpEntity<>(null, httpHeaders);
         logger.debug("PCMember Invitation: " + request.toString());
-        return ResponseEntity.ok(service.pcmInvitation(request));
+        return ResponseEntity.ok(chairMeetingService.pcmInvitation(request));
     }
 }

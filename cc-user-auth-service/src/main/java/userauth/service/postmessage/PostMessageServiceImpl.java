@@ -48,7 +48,7 @@ public class PostMessageServiceImpl implements PostMessageService {
                 timestamp.toString()
         );
         sendMessage(request.getPosterId(),post);
-        //postRepository.save(post);
+        postRepository.save(post);
     }
 
     @Override

@@ -1,9 +1,11 @@
 package adminmeeting.domain;
 
 
-import javafx.util.Pair;
+//import adminmeeting.utility.Pair;
+//import javafx.util.Pair;
 
-import javax.persistence.*;
+import adminmeeting.utility.Pair;
+
 import java.util.Set;
 
 public class Article {
